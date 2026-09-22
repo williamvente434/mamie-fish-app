@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamie Fish</title>
+  <style>
+    :root {
+      --orange: #ff7a00;
+      --orange-dark: #d86100;
+      --bg: #fff7f1;
+      --card: #ffffff;
+      --text: #2b241f;
+      --muted: #786a5d;
+      --line: #f1e3d3;
+      --green: #1e9d6d;
+      --shadow: 0 12px 30px rgba(96, 53, 18, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #fff8f2 0%, #fff1e2 100%);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+      color: white;
+      padding: 28px 20px 22px;
+      box-shadow: 0 8px 18px rgba(255, 122, 0, 0.18);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2vw, 2.6rem);
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(300px, 360px);
+      gap: 22px;
+      margin-top: 24px;
+      align-items: start;
+    }
+
+    .menu-panel,
+    .cart-panel {
+      background: rgba(255,255,255,0.76);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+    }
+
+    .menu-panel {
+      padding: 18px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 10px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .count {
+      background: #fff3e8;
+      color: var(--orange-dark);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 18px rgba(70, 44, 18, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 22px rgba(70, 44, 18, 0.08);
+    }
+
+    .food-emoji {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: #fff3e6;
+      border-radius: 14px;
+      font-size: 1.7rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0 12px;
+      gap: 10px;
+    }
+
+    .tag {
+      background: #fff0df;
+      color: var(--orange-dark);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.73rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .price {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--green);
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      min-height: 42px;
+      line-height: 1.4;
+    }
+
+    .button-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .add-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+      color: white;
+      font-weight: bold;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .add-btn:hover {
+      opacity: 0.95;
+    }
+
+    .cart-panel {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .cart-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .cart-items {
+      min-height: 60px;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      background: #fffaf6;
+      padding: 12px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .total-box {
+      background: #f8f2eb;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      font-weight: bold;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group {
+      margin: 10px 0;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: white;
+      font-size: 0.95rem;
+      outline: none;
+      color: var(--text);
+    }
+
+    input:focus, select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.12);
+    }
+
+    .pay-btn {
+      width: 100%;
+      margin-top: 12px;
+      border: none;
+      background: linear-gradient(135deg, #1f9d63 0%, #167d52 100%);
+      color: white;
+      font-weight: bold;
+      padding: 14px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">
+        <h1>🍽️ Mamie Fish</h1>
+        <p>Commandes rapides, savoureuses et bien préparées.</p>
+      </div>
+      <div class="badge">Yaoundé • Livraison rapide</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="layout">
+      <section class="menu-panel">
+        <div class="section-title">
+          <h2>Nos aliments</h2>
+          <span class="count" id="countLabel">0 plats</span>
+        </div>
+        <div class="grid" id="menu"></div>
+      </section>
+
+      <aside class="cart-panel">
+        <div class="cart-header">
+          <h3>Mon panier</h3>
+          <span id="cartBadge" class="count">0</span>
+        </div>
+
+        <div class="cart-items" id="list">
+          Panier vide
+        </div>
+
+        <div class="total-box">
+          <span>Total</span>
+          <span><span id="total">0</span> FCFA</span>
+        </div>
+
+        <div class="form-group">
+          <input id="nom" placeholder="Votre nom" type="text">
+        </div>
+        <div class="form-group">
+          <input id="tel" placeholder="Tel OM/MoMo 6XX XX XX XX" type="tel">
+        </div>
+        <div class="form-group">
+          <input id="heure" type="time">
+        </div>
+        <div class="form-group">
+          <select id="paiement">
+            <option value="Cash">Payer à la livraison - Cash</option>
+            <option value="Orange Money">Orange Money</option>
+            <option value="MTN MoMo">MTN MoMo</option>
+          </select>
+        </div>
+
+        <button class="pay-btn" onclick="payer()">COMMANDER</button>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    let cart = [];
+    let MENU = [];
+
+    fetch('/api/menu')
+      .then(r => r.json())
+      .then(data => {
+        MENU = data;
+        document.getElementById('countLabel').innerText = `${data.length} plats`;
+        document.getElementById('menu').innerHTML = data.map(p => `
+          <div class="card">
+            <div class="food-emoji">${getEmoji(p.cat)}</div>
+            <h3>${p.nom}</h3>
+            <div class="meta">
+              <span class="tag">${p.cat}</span>
+              <span class="price">${p.prix} FCFA</span>
+            </div>
+            <div class="desc">${p.desc}</div>
+            <div class="button-row">
+              <button class="add-btn" onclick="add(${p.id})">+ Ajouter</button>
+            </div>
+          </div>
+        `).join('');
+      });
+
+    function getEmoji(cat) {
+      const emojis = {
+        salade: '🥗',
+        poulet: '🍗',
+        riz: '🍚',
+        poisson: '🐟',
+        tradition: '🍲'
+      };
+      return emojis[cat] || '🥘';
+    }
+
+    function add(id) {
+      const item = MENU.find(x => x.id == id);
+      if (item) {
+        cart.push(item);
+        upd();
+      }
+    }
+
+    function upd() {
+      const total = cart.reduce((sum, p) => sum + p.prix, 0);
+      document.getElementById('cartBadge').innerText = cart.length;
+      document.getElementById('total').innerText = total;
+
+      if (cart.length === 0) {
+        document.getElementById('list').innerHTML = 'Panier vide';
+        return;
+      }
+
+      const items = cart.reduce((acc, p) => {
+        acc[p.nom] = (acc[p.nom] || 0) + 1;
+        return acc;
+      }, {});
+
+      document.getElementById('list').innerHTML = Object.entries(items)
+        .map(([name, qty]) => `<div class="cart-item"><span>${name} x${qty}</span><span>${qty * (MENU.find(p => p.nom === name)?.prix || 0)} FCFA</span></div>`)
+        .join('');
+    }
+
+    async function payer() {
+      const nom = document.getElementById('nom').value;
+      const tel = document.getElementById('tel').value;
+      const heure = document.getElementById('heure').value;
+      const paiement = document.getElementById('paiement').value;
+
+      if (!nom || !tel || !heure || cart.length === 0) {
+        alert('Veuillez remplir vos informations et ajouter au moins un plat.');
+        return;
+      }
+
+      const total = cart.reduce((s, p) => s + p.prix, 0);
+
+      const res = await fetch('/api/commander', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom,
+          tel,
+          heure,
+          paiement,
+          cart,
+          total
+        })
+      });
+
+      const j = await res.json();
+      alert(j.message + ' Un SMS MoMo va arriver.');
+      cart = [];
+      upd();
+      document.getElementById('nom').value = '';
+      document.getElementById('tel').value = '';
+      document.getElementById('heure').value = '';
+    }
+  </script>
+</body>
+</html>
