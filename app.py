@@ -111,5 +111,19 @@ def update(id):
     db.session.commit()
     return jsonify({"success": True})
 
+@app.route('/api/valider/<int:id>')
+def valider_commande(id):
+    cmd = Commande.query.get_or_404(id)
+    cmd.statut = 'payee'
+    db.session.commit()
+    return redirect('/admin')
+
+@app.route('/api/supprimer/<int:id>')
+def supprimer_commande(id):
+    cmd = Commande.query.get_or_404(id)
+    db.session.delete(cmd)
+    db.session.commit()
+    return redirect('/admin')
+
 if __name__ == '__main__':
     app.run(debug=True)

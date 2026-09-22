@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Mamie Fish</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
-<body class="dashboard-body">
+<body>
   <div class="container">
     <header class="header">
       <div>
         <h1>📊 Dashboard Mamie Fish</h1>
-        <p>Vue générale de l’activité du site</p>
+        <p>Suivi en temps réel des commandes</p>
       </div>
       <div class="chip">{{ commandes|length }} commandes</div>
     </header>
@@ -32,7 +32,7 @@
           <div class="stat-icon">💰</div>
         </div>
         <p class="stat-value">{{ total_revenu }}F</p>
-        <div class="stat-detail">Montant total reçu</div>
+        <div class="stat-detail">Montant total</div>
       </div>
 
       <div class="stat-card">
@@ -57,7 +57,7 @@
     <section class="panel">
       <div class="panel-head">
         <h2>Historique des commandes</h2>
-        <span class="chip">Paiement cash : {{ paiement_cash }}</span>
+        <div class="chip">Payées : {{ paiement_cash }}</div>
       </div>
 
       {% if commandes %}
@@ -68,28 +68,34 @@
             <th>Client</th>
             <th>Téléphone</th>
             <th>Plat</th>
-            <th>Quantité</th>
             <th>Total</th>
             <th>Statut</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for c in commandes %}
           <tr>
             <td>#{{ c.id }}</td>
-            <td>{{ c.client }}</td>
-            <td>{{ c.telephone }}</td>
-            <td>{{ c.plat }}</td>
-            <td>{{ c.quantite }}</td>
-            <td>{{ c.prix_total }}F</td>
             <td>
-              <select onchange="fetch('/api/update/{{ c.id }}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({statut:this.value})})">
-                <option>{{ c.statut }}</option>
-                <option>en_attente</option>
-                <option>payee</option>
-                <option>prete</option>
-                <option>livree</option>
-              </select>
+              <strong>{{ c.client }}</strong>
+              {% if c.adresse %}<br><small>{{ c.adresse }}</small>{% endif %}
+            </td>
+            <td><a href="https://wa.me/237{{ c.telephone }}" target="_blank" rel="noopener">{{ c.telephone }}</a></td>
+            <td>{{ c.plat }} × {{ c.quantite }}</td>
+            <td><strong>{{ c.prix_total }}F</strong></td>
+            <td>
+              <span class="status {% if c.statut == 'payee' %}paye{% elif c.statut == 'livree' %}livree{% else %}attente{% endif %}">
+                {{ c.statut }}
+              </span>
+            </td>
+            <td>
+              <div class="table-actions">
+                {% if c.statut != 'payee' %}
+                <a class="action-button success" href="/api/valider/{{ c.id }}">Valider</a>
+                {% endif %}
+                <a class="action-button danger" href="/api/supprimer/{{ c.id }}" onclick="return confirm('Supprimer cette commande ?')">Supprimer</a>
+              </div>
             </td>
           </tr>
           {% endfor %}
