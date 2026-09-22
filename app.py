@@ -28,11 +28,21 @@ class Commande(db.Model):
 with app.app_context():
     db.create_all()
 
-PRIX_PLATS = {"Poulet DG": 5000, "Poisson Braisé": 4500, "Eru": 3000}
+MENU = [
+    {"id": 1, "nom": "Poulet DG", "desc": "Poulet bien grillé, accompagnement maison", "prix": 5000, "cat": "poulet"},
+    {"id": 2, "nom": "Poisson Braisé", "desc": "Poisson frais et savoureux", "prix": 4500, "cat": "poisson"},
+    {"id": 3, "nom": "Eru", "desc": "Plat traditionnel du pays", "prix": 3000, "cat": "tradition"},
+    {"id": 4, "nom": "Riz Sauté", "desc": "Riz parfumé aux légumes", "prix": 2500, "cat": "riz"},
+    {"id": 5, "nom": "Salade Mixte", "desc": "Légumes frais et goûté", "prix": 2200, "cat": "salade"}
+]
 
 @app.route('/')
 def index():
-    return render_template('index.html', plats=PRIX_PLATS, public_key=os.environ.get('NOTCHPAY_PUBLIC_KEY'))
+    return render_template('index.html', plats=MENU, public_key=os.environ.get('NOTCHPAY_PUBLIC_KEY'))
+
+@app.route('/api/menu')
+def get_menu():
+    return jsonify(MENU)
 
 @app.route('/admin')
 def admin():
@@ -42,7 +52,7 @@ def admin():
 @app.route('/api/commander', methods=['POST'])
 def commander():
     data = request.json
-    prix_unitaire = PRIX_PLATS.get(data['plat'], 0)
+    prix_unitaire = next((item['prix'] for item in MENU if item['nom'] == data['plat']), 0)
     prix_total = prix_unitaire * int(data['quantite'])
     
     nouvelle_commande = Commande(
