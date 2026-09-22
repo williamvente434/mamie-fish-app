@@ -1,62 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mamie Fish - Commande</title>
-<style>
-body{font-family:Arial;background:#fff8f0;padding:20px}
-.card{max-width:500px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc}
-button{background:#e67e22;color:white;font-weight:bold;border:none;cursor:pointer}
-button:hover{background:#d35400}
-.plat{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamie Fish - Commande</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-<div class="card">
-<h2>🐟 Mamie Fish - Commander</h2>
-<div id="menu"></div>
-<hr>
-<input id="client" placeholder="Ton nom">
-<input id="telephone" placeholder="Téléphone WhatsApp ex: 6XX XXX XXX">
-<input id="adresse" placeholder="Quartier / Adresse livraison">
-<select id="plat"></select>
-<input id="quantite" type="number" value="1" min="1">
-<button id="btn">Commander et Payer MoMo / OM</button>
-<p id="msg"></p>
-</div>
+<body class="home-body">
+  <div class="card home-card">
+    <h2>🐟 Mamie Fish - Commander</h2>
+    <div id="menu"></div>
+    <hr>
+    <input id="client" placeholder="Ton nom">
+    <input id="telephone" placeholder="Téléphone WhatsApp ex: 6XX XXX XXX">
+    <input id="adresse" placeholder="Quartier / Adresse livraison">
+    <select id="plat"></select>
+    <input id="quantite" type="number" value="1" min="1">
+    <button id="btn">Commander et Payer MoMo / OM</button>
+    <p id="msg"></p>
+  </div>
 
-<script>
-let MENU = {{ plats | tojson }};
-const sel = document.getElementById('plat');
-const menuDiv = document.getElementById('menu');
-MENU.forEach(p=>{
-  let o=document.createElement('option'); o.value=p.nom; o.textContent=`${p.nom} - ${p.prix} FCFA`; sel.appendChild(o);
-  let d=document.createElement('div'); d.className='plat'; d.innerHTML=`<b>${p.nom}</b><span>${p.prix} FCFA</span><br><small>${p.desc}</small>`; menuDiv.appendChild(d);
-});
-
-document.getElementById('btn').onclick = async ()=>{
-  const data = {
-    client: document.getElementById('client').value,
-    telephone: document.getElementById('telephone').value,
-    adresse: document.getElementById('adresse').value,
-    plat: document.getElementById('plat').value,
-    quantite: document.getElementById('quantite').value
-  };
-  if(!data.client || !data.telephone){ alert('Mets nom et téléphone'); return; }
-  document.getElementById('msg').textContent='Traitement...';
-  try{
-    let res = await fetch('/api/commander',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
-    let j = await res.json();
-    if(j.payment_url){
-      window.location.href = j.payment_url;
-    }else{
-      document.getElementById('msg').textContent='✅ Commande reçue ! On t\'appelle bientôt. ID: '+j.id;
-    }
-  }catch(e){
-    document.getElementById('msg').textContent='Erreur réseau, réessaie';
-  }
-}
-</script>
+  <script>
+    const MENU = {{ plats | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

@@ -47,7 +47,21 @@ def get_menu():
 @app.route('/admin')
 def admin():
     commandes = Commande.query.order_by(Commande.date.desc()).all()
-    return render_template('admin.html', commandes=commandes)
+    total_commandes = len(commandes)
+    total_revenu = sum(c.prix_total or 0 for c in commandes)
+    en_attente = sum(1 for c in commandes if c.statut == 'en_attente')
+    livrees = sum(1 for c in commandes if c.statut == 'livree')
+    paiement_cash = sum(1 for c in commandes if c.statut == 'payee')
+
+    return render_template(
+        'admin.html',
+        commandes=commandes,
+        total_commandes=total_commandes,
+        total_revenu=total_revenu,
+        en_attente=en_attente,
+        livrees=livrees,
+        paiement_cash=paiement_cash
+    )
 
 @app.route('/api/commander', methods=['POST'])
 def commander():

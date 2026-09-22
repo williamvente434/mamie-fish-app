@@ -4,208 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Mamie Fish</title>
-  <style>
-    :root {
-      --bg: #fff8f2;
-      --card: #ffffff;
-      --orange: #ff7a00;
-      --orange-dark: #d86100;
-      --green: #1ea66d;
-      --blue: #2e7ae6;
-      --red: #d94f4f;
-      --text: #2d241f;
-      --muted: #6f6259;
-      --line: #f1e2d2;
-      --shadow: 0 12px 30px rgba(90, 50, 14, 0.08);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #fff9f4 0%, #fef1e7 100%);
-      color: var(--text);
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 28px 20px 40px;
-    }
-
-    .header {
-      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
-      color: white;
-      border-radius: 22px;
-      padding: 24px 28px;
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 2.4vw, 2.8rem);
-    }
-
-    .header p {
-      margin: 6px 0 0;
-      opacity: 0.9;
-    }
-
-    .chip {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: 999px;
-      padding: 9px 14px;
-      font-weight: bold;
-      font-size: 0.8rem;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 18px;
-      margin-top: 22px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-bottom: 12px;
-    }
-
-    .stat-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 1.3rem;
-      background: #fff0df;
-    }
-
-    .stat-value {
-      font-size: clamp(1.8rem, 2vw, 2.4rem);
-      font-weight: bold;
-      color: var(--text);
-      margin: 0;
-    }
-
-    .stat-detail {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .panel {
-      margin-top: 24px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .panel-head {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .panel-head h2 {
-      margin: 0;
-      font-size: 1.4rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-    }
-
-    th {
-      background: #fffaf5;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--muted);
-    }
-
-    td {
-      color: var(--text);
-      font-size: 0.96rem;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .status.en-attente { background: #fff1d7; color: #a86300; }
-    .status.preparation { background: #eaf3ff; color: #275fc9; }
-    .status.prete { background: #e7faf0; color: #1b8a5b; }
-    .status.livree { background: #e9f8ef; color: #1f8d68; }
-
-    select {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 0.9rem;
-      color: var(--text);
-      outline: none;
-    }
-
-    .empty {
-      padding: 26px 18px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    @media (max-width: 700px) {
-      th, td {
-        padding: 10px 8px;
-      }
-
-      .header {
-        padding: 18px 18px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="dashboard-body">
   <div class="container">
     <header class="header">
       <div>
@@ -266,9 +67,9 @@
             <th>ID</th>
             <th>Client</th>
             <th>Téléphone</th>
-            <th>Commande</th>
+            <th>Plat</th>
+            <th>Quantité</th>
             <th>Total</th>
-            <th>Paiement</th>
             <th>Statut</th>
           </tr>
         </thead>
@@ -276,18 +77,18 @@
           {% for c in commandes %}
           <tr>
             <td>#{{ c.id }}</td>
-            <td>{{ c.nom_client }}</td>
+            <td>{{ c.client }}</td>
             <td>{{ c.telephone }}</td>
-            <td>{{ c.plats }}</td>
-            <td>{{ c.total }}F</td>
-            <td>{{ c.paiement }}</td>
+            <td>{{ c.plat }}</td>
+            <td>{{ c.quantite }}</td>
+            <td>{{ c.prix_total }}F</td>
             <td>
-              <select onchange="fetch('/api/admin/update/{{ c.id }}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({statut:this.value})})">
+              <select onchange="fetch('/api/update/{{ c.id }}', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({statut:this.value})})">
                 <option>{{ c.statut }}</option>
-                <option>En attente</option>
-                <option>Préparation</option>
-                <option>Prête</option>
-                <option>Livrée</option>
+                <option>en_attente</option>
+                <option>payee</option>
+                <option>prete</option>
+                <option>livree</option>
               </select>
             </td>
           </tr>
